@@ -1,0 +1,11 @@
+name: MachineProcessed
+version: '${project.version}'
+main: com.rinpr.machineprocessed.MachineProcessed
+api-version: 1.19
+authors: [ Rin_Pr ]
+description: Craft an item with this plugin
+commands:
+  machineprocessed:
+    usage: /machineprocessed <machine>
+    description: Use to toggle machine
+    aliases: [mp, mprocess]
