@@ -2,36 +2,60 @@ package com.rinpr.machineprocessed.Listener;
 
 import com.rinpr.machineprocessed.MachineSection.MachineConfig;
 import com.rinpr.machineprocessed.Utilities.Message;
+import dev.lone.itemsadder.api.CustomBlock;
+import dev.lone.itemsadder.api.Events.FurnitureInteractEvent;
+import io.th0rgal.oraxen.api.events.OraxenFurnitureInteractEvent;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.event.inventory.InventoryEvent;
+import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.*;
 
 public class openMachine implements Listener {
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = false)
-    public void machineClick(InventoryClickEvent event) {
+//    @EventHandler
+//    public void openMachineEvent(PlayerInteractEvent event) {
+//        Block block = event.getClickedBlock();
+//        Player player = event.getPlayer();
+//        CustomBlock customBlock = CustomBlock.byAlreadyPlaced(block);
+//        if(customBlock != null) {
+//            Message.send(player, String.valueOf(customBlock));
+//        } else {
+//            Message.send(player,"not a itemsadder block");
+//        }
+//    }
+    @EventHandler (priority = EventPriority.HIGHEST, ignoreCancelled = false)
+    public void PlayerInteractGUIEvent(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
         ArrayList<Integer> space_slot = new ArrayList<>();
         Collections.addAll(space_slot, 0,4,5,6,7,8,9,10,12,13,14,15,17,18,19,21,22,23,24,25,26);
 
-        // Check if the clicked inventory is the machine GUI
-        Inventory clickedInv = event.getClickedInventory();
-        if (clickedInv == null) return; // player clicked outside inventory
-        if (!MachineConfig.MachineName().contains(event.getView().getTitle())) return; // not a machine
-        if (clickedInv.getSize() != 27) return; // not a machine
+        // Check if it's a machine gui or not.
+        if (event.getClickedInventory() == null) return;
+        if (!MachineConfig.MachineName().contains(event.getView().getTitle())) return;
+        if (event.getClickedInventory().getSize() != 27) return;
 
-        int rawSlot = event.getRawSlot();
-        if (space_slot.contains(rawSlot)) {
-            event.setCancelled(true); // prevent player from moving items in other slots
+        if (space_slot.contains(event.getRawSlot())) {
+            event.setCancelled(true); // prevent player from clicking in space slot
             Message.send(player, "&cYou are not allowed to place an item in this slot!");
         } else {
             Message.send(player, "This slot will be used for machine processing");
+        }
+    }
+    @EventHandler
+    public void PlayerDragEvent(InventoryDragEvent event) {
+        Set<Integer> space_slot = new HashSet<>();
+        Collections.addAll(space_slot, 0,4,5,6,7,8,9,10,12,13,14,15,17,18,19,21,22,23,24,25,26);
+        if (MachineConfig.MachineName().contains(event.getView().getTitle()) && space_slot.contains(event.getRawSlots())) {
+            event.setCancelled(true);
         }
     }
 }
