@@ -1,13 +1,14 @@
 package com.rinpr.machineprocessed.Utilities;
 
 import dev.lone.itemsadder.api.CustomStack;
-import io.th0rgal.oraxen.api.OraxenFurniture;
 import io.th0rgal.oraxen.api.OraxenItems;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 import java.util.function.Function;
+
+import static com.rinpr.machineprocessed.MachineProcessed.plugin;
 
 public class ItemIdentifier {
     private List<ItemType> items;
@@ -36,6 +37,22 @@ public class ItemIdentifier {
             }
         }
         return result;
+    }
+    public static String getItemType(ItemStack itemStack) {
+        if (plugin.isPluginEnabled("Itemsadder") && plugin.isPluginEnabled("Oraxen")) return null;
+        if (plugin.isPluginEnabled("Itemsadder")) {
+            if (CustomStack.byItemStack(itemStack) != null) return "itemsadder";
+        } else if (plugin.isPluginEnabled("Oraxen")) {
+            if (OraxenItems.getIdByItem(itemStack) != null) return "oraxen"; }
+        return "vanilla";
+    }
+    public static String getNamespacedID(ItemStack itemStack) { return CustomStack.byItemStack(itemStack).getNamespacedID(); }
+    public static List<String> getNamespacedID(Set<ItemStack> items) {
+        List<String> NamespacedID = new ArrayList<>();
+        for (ItemStack item : items) {
+            NamespacedID.add(CustomStack.byItemStack(item).getNamespacedID());
+        }
+        return NamespacedID;
     }
     private ItemStack getVanillaItemStack(String itemID) {
         return new ItemStack(Objects.requireNonNull(Material.getMaterial(itemID.toUpperCase())));

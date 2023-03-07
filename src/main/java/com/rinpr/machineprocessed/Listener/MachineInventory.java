@@ -2,24 +2,16 @@ package com.rinpr.machineprocessed.Listener;
 
 import com.rinpr.machineprocessed.MachineSection.MachineConfig;
 import com.rinpr.machineprocessed.Utilities.Message;
-import dev.lone.itemsadder.api.CustomBlock;
-import dev.lone.itemsadder.api.Events.FurnitureInteractEvent;
-import io.th0rgal.oraxen.api.events.OraxenFurnitureInteractEvent;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.event.inventory.InventoryEvent;
-import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.Inventory;
 
 import java.util.*;
 
-public class openMachine implements Listener {
+public class MachineInventory implements Listener {
 
 //    @EventHandler
 //    public void openMachineEvent(PlayerInteractEvent event) {

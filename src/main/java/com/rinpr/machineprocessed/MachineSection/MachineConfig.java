@@ -57,8 +57,20 @@ public class MachineConfig {
             guiName.add(name);
             if (name == null) { Bukkit.getLogger().warning("Incomplete configuration of gui name"); }
         }
-
         return guiName;
+    }
+    public static Set<ItemStack> getAllMachines() {
+        Set<ItemStack> machine = new HashSet<>();
+        for (String filename : MachineConfig.MachineList()) {
+            YamlConfiguration yaml = YamlConfiguration.loadConfiguration(new File(folder + "/" + filename + ".yml"));
+            List<ItemStack> name = new ItemIdentifier(Objects.requireNonNull(yaml.getString(filename + ".machine"))).getItemStack();
+            machine.add(name.get(0));
+            if (name.get(0) == null) { Bukkit.getLogger().warning("Incomplete configuration of gui machine"); }
+        }
+        return machine;
+    }
+    public List<ItemStack> getMachine() {
+        return new ItemIdentifier(Objects.requireNonNull(yaml.getString(id + ".machine"))).getItemStack();
     }
     public String getGUIName() {
         return yaml.getString(id + ".name");

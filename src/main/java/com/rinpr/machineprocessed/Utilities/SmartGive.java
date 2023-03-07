@@ -5,8 +5,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 public class SmartGive {
     private final Inventory inv;
@@ -28,6 +30,12 @@ public class SmartGive {
 
     public void give(List<ItemStack> item) {
         for (ItemStack drop : inv.addItem(item.toArray(new ItemStack[0])).values())
+            Objects.requireNonNull(loc.getWorld()).dropItem(loc, drop);
+    }
+
+    public void give(Set<ItemStack> item) {
+        List<ItemStack> items = new ArrayList<>(item);
+        for (ItemStack drop : inv.addItem(items.toArray(new ItemStack[0])).values())
             Objects.requireNonNull(loc.getWorld()).dropItem(loc, drop);
     }
 

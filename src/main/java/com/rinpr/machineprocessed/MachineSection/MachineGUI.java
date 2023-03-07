@@ -29,4 +29,7 @@ public class MachineGUI {
         //for (int slot : space_slot) { inv.setItem(slot,space); }
         player.openInventory(inv);
     }
+    public void openGUI(int machineId) {
+        return;
+    }
 }

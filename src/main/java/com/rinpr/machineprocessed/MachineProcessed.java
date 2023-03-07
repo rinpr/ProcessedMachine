@@ -3,7 +3,10 @@ package com.rinpr.machineprocessed;
 import com.rinpr.machineprocessed.Command.DebugCommand;
 import com.rinpr.machineprocessed.Command.MProcessed;
 import com.rinpr.machineprocessed.CompleteTab.MachineTabComplete;
-import com.rinpr.machineprocessed.Listener.openMachine;
+import com.rinpr.machineprocessed.DataManager.SQLiteManager;
+import com.rinpr.machineprocessed.Listener.ItemsAdderMachine;
+import com.rinpr.machineprocessed.Listener.OraxenMachine;
+import com.rinpr.machineprocessed.Listener.MachineInventory;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -13,6 +16,7 @@ import static com.rinpr.machineprocessed.MachineSection.MachineConfig.generateMa
 
 public final class MachineProcessed extends JavaPlugin {
     public static MachineProcessed plugin;
+    private final SQLiteManager sqLiteManager = new SQLiteManager(this);
     public MachineProcessed() {
         plugin = this;
     }
@@ -31,11 +35,22 @@ public final class MachineProcessed extends JavaPlugin {
         Objects.requireNonNull(this.getCommand("machineprocessed")).setTabCompleter(new MachineTabComplete());
     }
     private void RegisterListener() {
-        Bukkit.getPluginManager().registerEvents(new openMachine(), this);
+        if (isPluginEnabled("Itemsadder") && isPluginEnabled("Oraxen")) return;
+        if (isPluginEnabled("Itemsadder")) {
+            Bukkit.getLogger().info("Itemsadder found!");
+            Bukkit.getPluginManager().registerEvents(new ItemsAdderMachine(), this);
+        } else if (isPluginEnabled("Oraxen")) {
+            Bukkit.getLogger().info("Oraxen found!");
+            Bukkit.getPluginManager().registerEvents(new OraxenMachine(), this);
+        }
+
+        Bukkit.getPluginManager().registerEvents(new MachineInventory(), this);
     }
     @Override
     public void onDisable() {
+        sqLiteManager.unloadSQLite();
         // Plugin shutdown logic
     }
+    public boolean isPluginEnabled(String plugin) { return getServer().getPluginManager().getPlugin(plugin) != null; }
     public static MachineProcessed getPlugin() { return plugin;}
 }
