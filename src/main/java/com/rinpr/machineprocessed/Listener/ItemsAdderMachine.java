@@ -10,38 +10,24 @@ import dev.lone.itemsadder.api.Events.FurniturePlaceEvent;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerInteractEvent;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 public class ItemsAdderMachine implements Listener {
-//    @EventHandler
-//    public void placeItemsadderMachineEvent(BlockPlaceEvent event) {
-//        Player player = event.getPlayer();
-//        Location block_location = event.getBlock().getLocation();
-//        ItemStack ignore_inhand_amount = player.getInventory().getItemInMainHand().clone();
-//        ignore_inhand_amount.setAmount(1);
-//        for (ItemStack item : MachineConfig.Machines()) {
-//            if (item.equals(ignore_inhand_amount)) { //
-//                SQLiteManager sqLiteManager = new SQLiteManager(plugin);
-//                sqLiteManager.addMachine(block_location);
-//                Message.send(player, "&ait is a machine block from config");
-//                return;
-//            }
-//        }
-//    }
-//    @EventHandler
-//    public void breakItemsadderMachineEvent(BlockBreakEvent event) {
-//        Player player = event.getPlayer();
-//        Location block_loc = event.getBlock().getLocation();
-//        if (event.getBlock().getType() == Material.BARRIER) {
-//            SQLiteManager sqLiteManager = new SQLiteManager(plugin);
-//            if (sqLiteManager.hasMachineId(block_loc)) {
-//                sqLiteManager.deleteMachine(block_loc);
-//                Message.send(player, "You broke a machine!");
-//            }
-//        }
-//    }
-    // instead of doing 2 event in the same method, I simply created 2 different method with one event in the same class.
+    @EventHandler
+    public void ItemsadderMachineEvent(PlayerInteractEvent event) {
+        /* Placing a machine
+        * First I need to check an item in player's hand to check if it's matches any machine's ItemStack from machine
+        * then get a location of clicked block to place a machine above it or side.
+        * after place a machine block then save that location to database, so it can be toggled again later
+        */
+
+        /* Breaking a machine
+        * First I need to
+        */
+    }
     public HashMap<String, Location> FurnitureData = new HashMap<String, Location>();
     @EventHandler
     public void placeItemsadderMachineEvent(FurniturePlaceEvent event) {
