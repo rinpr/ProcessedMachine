@@ -16,7 +16,6 @@ import static com.rinpr.machineprocessed.MachineSection.MachineConfig.generateMa
 
 public final class MachineProcessed extends JavaPlugin {
     public static MachineProcessed plugin;
-    private final SQLiteManager sqLiteManager = new SQLiteManager(this);
     public MachineProcessed() {
         plugin = this;
     }
@@ -27,6 +26,7 @@ public final class MachineProcessed extends JavaPlugin {
         generateMachineFolder();
         RegisterCommand();
         RegisterListener();
+        SQLiteManager.loadSQLite();
     }
     private void RegisterCommand() {
         new DebugCommand();
@@ -48,7 +48,7 @@ public final class MachineProcessed extends JavaPlugin {
     }
     @Override
     public void onDisable() {
-        sqLiteManager.unloadSQLite();
+        SQLiteManager.unloadSQLite();
         // Plugin shutdown logic
     }
     public boolean isPluginEnabled(String plugin) { return getServer().getPluginManager().getPlugin(plugin) != null; }
