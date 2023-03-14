@@ -26,7 +26,7 @@ public class MachineGUI {
         space_meta.setDisplayName(" ");
         space_meta.setCustomModelData(1);
         space.setItemMeta(space_meta);
-        //for (int slot : space_slot) { inv.setItem(slot,space); }
+        for (int slot : space_slot) { inv.setItem(slot,space); }
         player.openInventory(inv);
     }
     public void openGUI(int machineId) {
