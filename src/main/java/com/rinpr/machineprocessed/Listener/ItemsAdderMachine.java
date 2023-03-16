@@ -1,10 +1,12 @@
 package com.rinpr.machineprocessed.Listener;
 
 import com.rinpr.machineprocessed.MachineSection.MachineConfig;
+import com.rinpr.machineprocessed.Utilities.FurnitureLocation;
 import com.rinpr.machineprocessed.Utilities.ItemIdentifier;
+import com.rinpr.machineprocessed.Utilities.Message;
 import dev.lone.itemsadder.api.Events.FurnitureBreakEvent;
 import dev.lone.itemsadder.api.Events.FurnitureInteractEvent;
-import dev.lone.itemsadder.api.Events.FurniturePlaceEvent;
+import dev.lone.itemsadder.api.Events.FurniturePlaceSuccessEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -46,8 +48,10 @@ public class ItemsAdderMachine implements Listener {
         player.sendMessage(ChatColor.GOLD + "Z: " + ChatColor.WHITE + b_loc.getBlockZ());
     }
     @EventHandler
-    public void placeItemsadderMachineEvent(FurniturePlaceEvent event) {
+    public void placeItemsadderMachineEvent(FurniturePlaceSuccessEvent event) {
         if (ItemIdentifier.getNamespacedID(MachineConfig.getAllMachines()).contains(event.getNamespacedID())) {
+            Message.send(event.getPlayer(), "You placed at location: ");
+            Message.send(event.getPlayer(), new FurnitureLocation(event.getBukkitEntity()).getLocation().toString());
 //            SQLiteManager sqLiteManager = new SQLiteManager(plugin);
 //            sqLiteManager.addMachine(event.getBlockPlaced().getLocation());
 //            Message.send(event.getPlayer(), "You placed a config machine!");
