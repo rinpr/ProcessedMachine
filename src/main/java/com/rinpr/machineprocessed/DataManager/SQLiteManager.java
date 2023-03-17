@@ -12,8 +12,8 @@ import static com.rinpr.machineprocessed.MachineProcessed.plugin;
 
 public class SQLiteManager {
     private final String dbFile;
-    private final String createTable = "CREATE TABLE IF NOT EXISTS machine_location (machine_id INTEGER PRIMARY KEY AUTOINCREMENT, world TEXT, x REAL, y REAL, z REAL)";
-    private final String addMachine = "INSERT INTO machine_location (world, x, y, z) VALUES (?, ?, ?, ?)";
+    private final String createTable = "CREATE TABLE IF NOT EXISTS machine_location (machine_id INTEGER PRIMARY KEY AUTOINCREMENT, machine TEXT, world TEXT, x REAL, y REAL, z REAL)";
+    private final String addMachine = "INSERT INTO machine_location (machine, world, x, y, z) VALUES (?, ?, ?, ?, ?)";
     private final String deleteMachine = "DELETE FROM machine_location WHERE world = ? AND x = ? AND y = ? AND z = ?";
     private final String selectMachineID = "SELECT * FROM machine_location WHERE machine_id=?";
     private final String selectMachineFromLocation = "SELECT * FROM machine_location WHERE world = ? AND x = ? AND y = ? AND z = ?";
@@ -27,13 +27,14 @@ public class SQLiteManager {
             connection.prepareStatement(createTable).execute();
         } catch (SQLException exception) { exception.printStackTrace(); }
     }
-    public void addMachine(Location location) {
+    public void addMachine(Location location, String MachineId) {
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbFile);
             PreparedStatement statement = connection.prepareStatement(addMachine)) {
-            statement.setString(1, Objects.requireNonNull(location.getWorld()).toString().substring(16, location.getWorld().toString().length() - 1));
-            statement.setDouble(2, location.getX());
-            statement.setDouble(3, location.getY());
-            statement.setDouble(4, location.getZ());
+            statement.setString(1, MachineId);
+            statement.setString(2, Objects.requireNonNull(location.getWorld()).toString().substring(16, location.getWorld().toString().length() - 1));
+            statement.setDouble(3, location.getX());
+            statement.setDouble(4, location.getY());
+            statement.setDouble(5, location.getZ());
             statement.executeUpdate();
             Bukkit.getLogger().info("Machine data add successfully");
         } catch (SQLException e) { Bukkit.getLogger().severe("An error occurred while adding data to Database: " + e.getMessage()); }

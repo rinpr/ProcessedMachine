@@ -13,17 +13,6 @@ import java.util.*;
 
 public class MachineInventory implements Listener {
 
-//    @EventHandler
-//    public void openMachineEvent(PlayerInteractEvent event) {
-//        Block block = event.getClickedBlock();
-//        Player player = event.getPlayer();
-//        CustomBlock customBlock = CustomBlock.byAlreadyPlaced(block);
-//        if(customBlock != null) {
-//            Message.send(player, String.valueOf(customBlock));
-//        } else {
-//            Message.send(player,"not a itemsadder block");
-//        }
-//    }
     @EventHandler (priority = EventPriority.HIGHEST, ignoreCancelled = false)
     public void PlayerInteractGUIEvent(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
@@ -37,9 +26,9 @@ public class MachineInventory implements Listener {
 
         if (space_slot.contains(event.getRawSlot())) {
             event.setCancelled(true); // prevent player from clicking in space slot
-            Message.send(player, "&cYou are not allowed to place an item in this slot!");
+//            Message.send(player, "&cYou are not allowed to place an item in this slot!");
         } else {
-            Message.send(player, "This slot will be used for machine processing");
+//            Message.send(player, "This slot will be used for machine processing");
         }
     }
     @EventHandler

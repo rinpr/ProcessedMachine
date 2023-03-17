@@ -1,5 +1,6 @@
 package com.rinpr.machineprocessed.Listener;
 
+import com.rinpr.machineprocessed.DataManager.SQLiteManager;
 import com.rinpr.machineprocessed.MachineSection.MachineConfig;
 import com.rinpr.machineprocessed.Utilities.FurnitureLocation;
 import com.rinpr.machineprocessed.Utilities.ItemIdentifier;
@@ -14,29 +15,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 
 import java.util.Objects;
 
 public class ItemsAdderMachine implements Listener {
     @EventHandler
-    public void ItemsadderMachineEvent(PlayerInteractEvent event) {
-        /* Placing a machine
-        * First I need to check an item in player's hand to check if it's matches any machine's ItemStack from machine
-        * then get a location of clicked block to place a machine above it or side.
-        * after place a machine block then save that location to database, so it can be toggled again later
-        */
-
-
-        /* Breaking a machine
-        * First I need to
-        */
-    }
-    @EventHandler
     public void ItemsadderPlaceMachine(BlockPlaceEvent event) {
-//        if (MachineConfig.getAllMachines().contains(event.getPlayer().getInventory().getItemInMainHand())) {
-//            Message.send(event.getPlayer(), "You placed machine from config.");
-//        }
         Block block = event.getBlock();
         Player player = event.getPlayer();
         Location b_loc = block.getLocation();
@@ -52,17 +36,24 @@ public class ItemsAdderMachine implements Listener {
         if (ItemIdentifier.getNamespacedID(MachineConfig.getAllMachines()).contains(event.getNamespacedID())) {
             Message.send(event.getPlayer(), "You placed at location: ");
             Message.send(event.getPlayer(), new FurnitureLocation(event.getBukkitEntity()).getLocation().toString());
-//            SQLiteManager sqLiteManager = new SQLiteManager(plugin);
-//            sqLiteManager.addMachine(event.getBlockPlaced().getLocation());
-//            Message.send(event.getPlayer(), "You placed a config machine!");
+            SQLiteManager sqLiteManager = new SQLiteManager();
+            sqLiteManager.addMachine(new FurnitureLocation(event.getBukkitEntity()).getLocation(), MachineConfig.getMachineId(Objects.requireNonNull(event.getFurniture()).getItemStack()));
         }
     }
     @EventHandler
     public void breakItemsadderMachineEvent(FurnitureBreakEvent event) {
-        //Message.send(event.getPlayer(), event.getNamespacedID());
+        if (ItemIdentifier.getNamespacedID(MachineConfig.getAllMachines()).contains(event.getNamespacedID())) {
+            Message.send(event.getPlayer(), "You break at location: ");
+            Message.send(event.getPlayer(), new FurnitureLocation(event.getBukkitEntity()).getLocation().toString());
+            SQLiteManager sqLiteManager = new SQLiteManager();
+            sqLiteManager.deleteMachine(new FurnitureLocation(event.getBukkitEntity()).getLocation());
+        }
     }
     @EventHandler
     public void openItemsadderMachineEvent(FurnitureInteractEvent event) {
-        //Message.send(event.getPlayer(), event.getNamespacedID());
+        if (MachineConfig.getAllMachines().contains(Objects.requireNonNull(event.getFurniture()).getItemStack())) {
+            Message.send(event.getPlayer(), MachineConfig.getMachineId(event.getFurniture().getItemStack()));
+            Message.send(event.getPlayer(), "You clicked at machine");
+        }
     }
 }

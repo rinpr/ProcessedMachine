@@ -69,6 +69,14 @@ public class MachineConfig {
         }
         return machine;
     }
+    public static String getMachineId(ItemStack itemStack) {
+        for (String fileId : MachineConfig.MachineList()) {
+            YamlConfiguration yaml = YamlConfiguration.loadConfiguration(new File(folder + "/" + fileId + ".yml"));
+            List<ItemStack> name = new ItemIdentifier(Objects.requireNonNull(yaml.getString(fileId + ".machine"))).getItemStack();
+            if (itemStack.equals(name.get(0))) { return fileId; }
+        }
+        return null;
+    }
     public List<ItemStack> getMachine() {
         return new ItemIdentifier(Objects.requireNonNull(yaml.getString(id + ".machine"))).getItemStack();
     }
