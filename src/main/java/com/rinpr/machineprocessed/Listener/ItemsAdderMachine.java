@@ -2,6 +2,7 @@ package com.rinpr.machineprocessed.Listener;
 
 import com.rinpr.machineprocessed.DataManager.SQLiteManager;
 import com.rinpr.machineprocessed.MachineSection.MachineConfig;
+import com.rinpr.machineprocessed.MachineSection.MachineGUI;
 import com.rinpr.machineprocessed.Utilities.FurnitureLocation;
 import com.rinpr.machineprocessed.Utilities.ItemIdentifier;
 import com.rinpr.machineprocessed.Utilities.Message;
@@ -44,15 +45,16 @@ public class ItemsAdderMachine implements Listener {
     public void breakItemsadderMachineEvent(FurnitureBreakEvent event) {
         if (ItemIdentifier.getNamespacedID(MachineConfig.getAllMachines()).contains(event.getNamespacedID())) {
             Message.send(event.getPlayer(), "You break at location: ");
-            Message.send(event.getPlayer(), new FurnitureLocation(event.getBukkitEntity()).getLocation().toString());
+            Message.send(event.getPlayer(), new FurnitureLocation(event.getBukkitEntity(),true).getLocation().toString());
             SQLiteManager sqLiteManager = new SQLiteManager();
-            sqLiteManager.deleteMachine(new FurnitureLocation(event.getBukkitEntity()).getLocation());
+            sqLiteManager.deleteMachine(new FurnitureLocation(event.getBukkitEntity(),true).getLocation());
         }
     }
     @EventHandler
     public void openItemsadderMachineEvent(FurnitureInteractEvent event) {
         if (MachineConfig.getAllMachines().contains(Objects.requireNonNull(event.getFurniture()).getItemStack())) {
-            Message.send(event.getPlayer(), MachineConfig.getMachineId(event.getFurniture().getItemStack()));
+            new MachineGUI(MachineConfig.getMachineId(event.getFurniture().getItemStack()), event.getPlayer()).openGUI();
+//            Message.send(event.getPlayer(), MachineConfig.getMachineId(event.getFurniture().getItemStack()));
             Message.send(event.getPlayer(), "You clicked at machine");
         }
     }
