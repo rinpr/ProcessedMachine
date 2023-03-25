@@ -17,9 +17,6 @@ public class MachineInventoryManager {
         this.slot16 = inventory.getItem(16) != null ? inventory.getItem(16) : new ItemStack(Material.AIR);
         this.slot20 = inventory.getItem(20) != null ? inventory.getItem(20) : new ItemStack(Material.AIR);
     }
-//    public MachineInventoryManager(ItemStack... items) {
-//
-//    }
     public ItemStack getIngredient1() { return slot1; }
     public ItemStack getIngredient2() { return slot2; }
     public ItemStack getIngredient3() { return slot3; }

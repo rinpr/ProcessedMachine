@@ -18,11 +18,12 @@ import static com.rinpr.machineprocessed.MachineProcessed.plugin;
 public class SQLiteManager {
     private final String dbFile;
     private final String createMachineTable = "CREATE TABLE IF NOT EXISTS machine_location (machine_id INTEGER PRIMARY KEY AUTOINCREMENT, machine TEXT, world TEXT, x REAL, y REAL, z REAL)";
-    private final String createInventoryTable = "CREATE TABLE IF NOT EXISTS machine_inventory (machine_id INTEGER PRIMARY KEY AUTOINCREMENT, slot1 TEXT, slot2 TEXT, slot3 TEXT, slot16 TEXT, slot20 TEXT)";
+    private final String createInventoryTable = "CREATE TABLE IF NOT EXISTS machine_inventory (machine_id INTEGER PRIMARY KEY AUTOINCREMENT, slot1 TEXT, slot2 TEXT, slot3 TEXT, slot11 TEXT, slot16 TEXT, slot20 TEXT)";
     private final String addMachine = "INSERT INTO machine_location (machine, world, x, y, z) VALUES (?, ?, ?, ?, ?)";
-    private final String addMachineInventory = "INSERT INTO machine_inventory (slot1, slot2, slot3, slot16, slot20) VALUES (?, ?, ?, ?, ?)";
+    private final String addMachineInventory = "INSERT INTO machine_inventory (slot1, slot2, slot3, slot11, slot16, slot20) VALUES (?, ?, ?, ?, ?, ?)";
     private final String selectMachineInventory= "SELECT * FROM machine_inventory WHERE machine_id=?";
     private final String updateMachineInventory = "UPDATE machine_inventory SET slot1=?, slot2=?, slot3=?, slot16=?, slot20=? WHERE machine_id=?";
+    private final String updateMachineProcess = "UPDATE machine_inventory SET slo11=? WHERE machine_id=?";
     private final String deleteMachineInventory = "DELETE FROM machine_inventory WHERE machine_id = ?";
     private final String deleteMachine = "DELETE FROM machine_location WHERE world = ? AND x = ? AND y = ? AND z = ?";
     private final String selectMachineID = "SELECT * FROM machine_location WHERE machine_id=?";
@@ -41,7 +42,12 @@ public class SQLiteManager {
     public void createMachineInventory() {
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbFile);
         PreparedStatement statement = connection.prepareStatement(addMachineInventory)) {
-            for (int i = 1; i < 6 ; i++) { statement.setString(i, new ItemStackSerializer(new ItemStack(Material.DIAMOND)).toItemString()); }
+            statement.setString(1, new ItemStackSerializer(new ItemStack(Material.AIR)).toItemString());
+            statement.setString(2, new ItemStackSerializer(new ItemStack(Material.AIR)).toItemString());
+            statement.setString(3, new ItemStackSerializer(new ItemStack(Material.AIR)).toItemString());
+            statement.setString(4, new ItemStackSerializer(new ItemStack(Material.PAPER)).toItemString());
+            statement.setString(5, new ItemStackSerializer(new ItemStack(Material.AIR)).toItemString());
+            statement.setString(6, new ItemStackSerializer(new ItemStack(Material.AIR)).toItemString());
             statement.executeUpdate();
         } catch (SQLException e) { Bukkit.getLogger().severe("An error occurred while adding ItemStack to Database: " + e.getMessage());}
     }
@@ -55,6 +61,7 @@ public class SQLiteManager {
                 item_string.add(resultSet.getString("slot1"));
                 item_string.add(resultSet.getString("slot2"));
                 item_string.add(resultSet.getString("slot3"));
+                item_string.add(resultSet.getString("slot11"));
                 item_string.add(resultSet.getString("slot16"));
                 item_string.add(resultSet.getString("slot20"));
             }
@@ -72,11 +79,20 @@ public class SQLiteManager {
                 item_string.add(resultSet.getString("slot1"));
                 item_string.add(resultSet.getString("slot2"));
                 item_string.add(resultSet.getString("slot3"));
+                item_string.add(resultSet.getString("slot11"));
                 item_string.add(resultSet.getString("slot16"));
                 item_string.add(resultSet.getString("slot20"));
             }
         } catch (SQLException e) { Bukkit.getLogger().severe("An error occurred while loading ItemStack from Database: " + e.getMessage()); }
         return item_string;
+    }
+    private void updateMachineProcess(int MachineId, ItemStack slot11) {
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbFile);
+             PreparedStatement statement = connection.prepareStatement(updateMachineProcess)) {
+            statement.setString(1, new ItemStackSerializer(slot11).toItemString());
+            statement.setInt(2, MachineId);
+            statement.executeUpdate();
+        } catch (SQLException e) { Bukkit.getLogger().severe("An error occurred while updating MachineProcess to Database: " + e.getMessage()); }
     }
     public void updateMachineInventory(int MachineId, ItemStack slot1, ItemStack slot2, ItemStack slot3, ItemStack slot16, ItemStack slot20) {
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbFile);
@@ -106,7 +122,7 @@ public class SQLiteManager {
             statement.setDouble(4, location.getY());
             statement.setDouble(5, location.getZ());
             statement.executeUpdate();
-            Bukkit.getLogger().info("Machine data add successfully");
+//            Bukkit.getLogger().info("Machine data add successfully");
         } catch (SQLException e) { Bukkit.getLogger().severe("An error occurred while adding data to Database: " + e.getMessage()); }
     }
     public void deleteMachine(Location location) {

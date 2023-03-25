@@ -35,12 +35,11 @@ public class MachineGUI {
     public void openGUI(int MachineId) {
         SQLiteManager item_slot = new SQLiteManager();
         int[] space_slot = new int[]{0,4,5,6,7,8,9,10,12,13,14,15,17,18,19,21,22,23,24,25,26};
-        int[] machine_slot = new int[]{1,2,3,16,20};
+        int[] machine_slot = new int[]{1,2,3,11,16,20};
         List<ItemStack> itemList = item_slot.getMachineInventory(MachineId);
         Inventory inv = Bukkit.createInventory(player, 27, guiName);
-        Message.send(player, itemList.toString());
 
-        for (int i = 0 ; i < 5 ; i++) { inv.setItem(machine_slot[i],itemList.get(i)); }
+        for (int i = 0 ; i <= 5; i++) { inv.setItem(machine_slot[i],itemList.get(i)); }
 
         ItemStack space = new ItemStack(Material.LIGHT_GRAY_STAINED_GLASS_PANE);
         ItemMeta space_meta = space.getItemMeta();

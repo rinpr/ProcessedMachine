@@ -39,8 +39,9 @@ public class ItemsAdderMachine implements Listener {
     @EventHandler
     public void placeItemsadderMachine(FurniturePlaceSuccessEvent event) {
         if (ItemIdentifier.getNamespacedID(MachineConfig.getAllMachines()).contains(event.getNamespacedID())) {
-            Message.send(event.getPlayer(), "You placed at location: ");
-            Message.send(event.getPlayer(), new FurnitureLocation(event.getBukkitEntity()).getLocation().toString());
+            // for debug
+//            Message.send(event.getPlayer(), "You placed at location: ");
+//            Message.send(event.getPlayer(), new FurnitureLocation(event.getBukkitEntity()).getLocation().toString());
             SQLiteManager sqLiteManager = new SQLiteManager();
             sqLiteManager.addMachine(new FurnitureLocation(event.getBukkitEntity()).getLocation(), MachineConfig.getMachineId(Objects.requireNonNull(event.getFurniture()).getItemStack()));
             sqLiteManager.createMachineInventory();
@@ -50,8 +51,9 @@ public class ItemsAdderMachine implements Listener {
     public void breakItemsadderMachine(FurnitureBreakEvent event) {
         if (ItemIdentifier.getNamespacedID(MachineConfig.getAllMachines()).contains(event.getNamespacedID())) {
             Location break_location = new FurnitureLocation(event.getBukkitEntity(),true).getLocation();
-            Message.send(event.getPlayer(), "You break at location: ");
-            Message.send(event.getPlayer(), break_location.toString());
+            // for debug
+//            Message.send(event.getPlayer(), "You break at location: ");
+//            Message.send(event.getPlayer(), break_location.toString());
             SQLiteManager sqLiteManager = new SQLiteManager();
             sqLiteManager.deleteMachineInventory(sqLiteManager.getMachineId(break_location));
             sqLiteManager.deleteMachine(break_location);
@@ -66,10 +68,9 @@ public class ItemsAdderMachine implements Listener {
             int MachineID = sqLiteManager.getMachineId(machine_location);
             new MachineGUI(MachineConfig.getMachineId(event.getFurniture().getItemStack()), event.getPlayer()).openGUI(MachineID);
             machinePlayerMap.put(event.getPlayer(), MachineID);
-//            Message.send(event.getPlayer(), MachineConfig.getMachineId(event.getFurniture().getItemStack()));
-            Message.send(event.getPlayer(), "You clicked at machine");
-            Message.send(event.getPlayer(), "MachineID: " + MachineID);
-            // Create a map to store player's machine open to store Player and MachineId for close event
+            // for debug
+//            Message.send(event.getPlayer(), "You clicked at machine");
+//            Message.send(event.getPlayer(), "MachineID: " + MachineID);
         }
     }
     @EventHandler
@@ -82,10 +83,10 @@ public class ItemsAdderMachine implements Listener {
 
         SQLiteManager sqLiteManager = new SQLiteManager();
         sqLiteManager.updateMachineInventory(machinePlayerMap.get(player), slot.getIngredient1(), slot.getIngredient2(), slot.getIngredient3(), slot.getFuel(), slot.getProduct());
-        Message.send(player,"Player Machine Map: " + machinePlayerMap.get(player).toString());
 
-        String output = slot.getIngredient1().toString() + slot.getIngredient2().toString() + slot.getIngredient3().toString() + slot.getFuel().toString() + slot.getProduct().toString();
-        Message.send(player,output);
+        // for debug
+//        String output = slot.getIngredient1().toString() + slot.getIngredient2().toString() + slot.getIngredient3().toString() + slot.getFuel().toString() + slot.getProduct().toString();
+//        Message.send(player,output);
 
         machinePlayerMap.remove(player);
     }
