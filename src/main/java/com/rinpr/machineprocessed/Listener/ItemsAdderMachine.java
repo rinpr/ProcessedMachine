@@ -5,6 +5,7 @@ import com.rinpr.machineprocessed.MachineSection.MachineConfig;
 import com.rinpr.machineprocessed.MachineSection.MachineGUI;
 import com.rinpr.machineprocessed.Utilities.FurnitureLocation;
 import com.rinpr.machineprocessed.Utilities.ItemIdentifier;
+import com.rinpr.machineprocessed.Utilities.MachineInventoryManager;
 import com.rinpr.machineprocessed.Utilities.Message;
 import dev.lone.itemsadder.api.Events.FurnitureBreakEvent;
 import dev.lone.itemsadder.api.Events.FurnitureInteractEvent;
@@ -16,12 +17,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class ItemsAdderMachine implements Listener {
     @EventHandler
-    public void ItemsadderPlaceMachine(BlockPlaceEvent event) {
+    public void BlockPlaceDebug(BlockPlaceEvent event) {
         Block block = event.getBlock();
         Player player = event.getPlayer();
         Location b_loc = block.getLocation();
@@ -33,29 +37,56 @@ public class ItemsAdderMachine implements Listener {
         player.sendMessage(ChatColor.GOLD + "Z: " + ChatColor.WHITE + b_loc.getBlockZ());
     }
     @EventHandler
-    public void placeItemsadderMachineEvent(FurniturePlaceSuccessEvent event) {
+    public void placeItemsadderMachine(FurniturePlaceSuccessEvent event) {
         if (ItemIdentifier.getNamespacedID(MachineConfig.getAllMachines()).contains(event.getNamespacedID())) {
             Message.send(event.getPlayer(), "You placed at location: ");
             Message.send(event.getPlayer(), new FurnitureLocation(event.getBukkitEntity()).getLocation().toString());
             SQLiteManager sqLiteManager = new SQLiteManager();
             sqLiteManager.addMachine(new FurnitureLocation(event.getBukkitEntity()).getLocation(), MachineConfig.getMachineId(Objects.requireNonNull(event.getFurniture()).getItemStack()));
+            sqLiteManager.createMachineInventory();
         }
     }
     @EventHandler
-    public void breakItemsadderMachineEvent(FurnitureBreakEvent event) {
+    public void breakItemsadderMachine(FurnitureBreakEvent event) {
         if (ItemIdentifier.getNamespacedID(MachineConfig.getAllMachines()).contains(event.getNamespacedID())) {
+            Location break_location = new FurnitureLocation(event.getBukkitEntity(),true).getLocation();
             Message.send(event.getPlayer(), "You break at location: ");
-            Message.send(event.getPlayer(), new FurnitureLocation(event.getBukkitEntity(),true).getLocation().toString());
+            Message.send(event.getPlayer(), break_location.toString());
             SQLiteManager sqLiteManager = new SQLiteManager();
-            sqLiteManager.deleteMachine(new FurnitureLocation(event.getBukkitEntity(),true).getLocation());
+            sqLiteManager.deleteMachineInventory(sqLiteManager.getMachineId(break_location));
+            sqLiteManager.deleteMachine(break_location);
         }
     }
+    Map<Player, Integer> machinePlayerMap = new HashMap<>();
     @EventHandler
-    public void openItemsadderMachineEvent(FurnitureInteractEvent event) {
+    public void openItemsadderMachine(FurnitureInteractEvent event) {
         if (MachineConfig.getAllMachines().contains(Objects.requireNonNull(event.getFurniture()).getItemStack())) {
-            new MachineGUI(MachineConfig.getMachineId(event.getFurniture().getItemStack()), event.getPlayer()).openGUI();
+            SQLiteManager sqLiteManager = new SQLiteManager();
+            Location machine_location = new FurnitureLocation(event.getBukkitEntity(),true).getLocation();
+            int MachineID = sqLiteManager.getMachineId(machine_location);
+            new MachineGUI(MachineConfig.getMachineId(event.getFurniture().getItemStack()), event.getPlayer()).openGUI(MachineID);
+            machinePlayerMap.put(event.getPlayer(), MachineID);
 //            Message.send(event.getPlayer(), MachineConfig.getMachineId(event.getFurniture().getItemStack()));
             Message.send(event.getPlayer(), "You clicked at machine");
+            Message.send(event.getPlayer(), "MachineID: " + MachineID);
+            // Create a map to store player's machine open to store Player and MachineId for close event
         }
+    }
+    @EventHandler
+    public void saveItemsAdderMachineInventory(InventoryCloseEvent event) {
+        if (!MachineConfig.MachineName().contains(event.getView().getTitle())) return;
+        if (event.getInventory().getSize() != 27) return;
+
+        Player player = (Player) event.getPlayer();
+        MachineInventoryManager slot = new MachineInventoryManager(event.getInventory());
+
+        SQLiteManager sqLiteManager = new SQLiteManager();
+        sqLiteManager.updateMachineInventory(machinePlayerMap.get(player), slot.getIngredient1(), slot.getIngredient2(), slot.getIngredient3(), slot.getFuel(), slot.getProduct());
+        Message.send(player,"Player Machine Map: " + machinePlayerMap.get(player).toString());
+
+        String output = slot.getIngredient1().toString() + slot.getIngredient2().toString() + slot.getIngredient3().toString() + slot.getFuel().toString() + slot.getProduct().toString();
+        Message.send(player,output);
+
+        machinePlayerMap.remove(player);
     }
 }

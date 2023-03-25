@@ -1,10 +1,16 @@
 package com.rinpr.machineprocessed.Command;
 
-import com.rinpr.machineprocessed.Utilities.CommandBase;
-import com.rinpr.machineprocessed.Utilities.ItemIdentifier;
-import com.rinpr.machineprocessed.Utilities.Message;
+import com.rinpr.machineprocessed.DataManager.SQLiteManager;
+import com.rinpr.machineprocessed.Utilities.*;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.List;
+import java.util.Objects;
+
+import static com.rinpr.machineprocessed.MachineProcessed.plugin;
 
 public class DebugCommand {
     public DebugCommand() {
@@ -12,8 +18,10 @@ public class DebugCommand {
             @Override
             public boolean onCommand(CommandSender sender, String [] arguments) {
                 Player player = (Player) sender;
-//                new SmartGive(player).give(MachineConfig.Machines());
-                Message.send(sender, ItemIdentifier.getItemType(((Player) sender).getInventory().getItemInMainHand()));
+                SQLiteManager sqLiteManager = new SQLiteManager();
+//                new SmartGive(player).give(sqLiteManager.getMachineInventory(3));
+                Message.send(player, sqLiteManager.getRawMachineInventory(3).toString());
+//                Message.send(new ItemStackSerializer(player.getInventory().getItemInMainHand()).toItemString());
                 return true;
             }
 
@@ -22,5 +30,37 @@ public class DebugCommand {
                 return "/print";
             }
         }.enableDelay(1);
+        new CommandBase("getitemstring") {
+            @Override
+            public boolean onCommand(CommandSender sender, String [] arguments) {
+                Player player = (Player) sender;
+                Message.send(new ItemStackSerializer(player.getInventory().getItemInMainHand()).toItemString());
+                return true;
+            }
+            @Override
+            public String getUsage() {
+                return "get itemstring from player's hand and send it to console";
+            }
+        };
+        new CommandBase("getitem") {
+            @Override
+            public boolean onCommand(CommandSender sender, String [] arguments) {
+                SQLiteManager sqLiteManager = new SQLiteManager();
+                Player player = (Player) sender;
+//                List<String> a = sqLiteManager.getRawMachineInventory(1);
+//                String single = a.get(1);
+//                for (String no : a ) {
+//                    new SmartGive(player).give(new ItemStackSerializer(no).toItemStack());
+//                }
+                new SmartGive(player).give(sqLiteManager.getMachineInventory(1));
+//                Message.send(player, String.valueOf(a.size()));
+//                new SmartGive(player).give(new ItemStackSerializer(single).toItemStack());
+                return true;
+            }
+            @Override
+            public String getUsage() {
+                return "get itemstack from config";
+            }
+        };
     }
 }
