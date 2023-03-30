@@ -7,8 +7,10 @@ import com.rinpr.machineprocessed.DataManager.SQLiteManager;
 import com.rinpr.machineprocessed.Listener.ItemsAdderMachine;
 import com.rinpr.machineprocessed.Listener.OraxenMachine;
 import com.rinpr.machineprocessed.Listener.MachineInventory;
+import com.rinpr.machineprocessed.Task.MachineProcessing;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Objects;
 
@@ -27,6 +29,10 @@ public final class MachineProcessed extends JavaPlugin {
         RegisterCommand();
         RegisterListener();
         SQLiteManager.loadSQLite();
+        RegisterTask();
+    }
+    private void RegisterTask() {
+        BukkitTask processing = new MachineProcessing(this).runTaskTimer(this,0,20L);
     }
     private void RegisterCommand() {
         new DebugCommand();

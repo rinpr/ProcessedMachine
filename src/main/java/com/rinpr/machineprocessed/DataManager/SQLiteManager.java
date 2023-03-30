@@ -1,5 +1,6 @@
 package com.rinpr.machineprocessed.DataManager;
 
+import com.rinpr.machineprocessed.MachineSection.MachineConfig;
 import com.rinpr.machineprocessed.Utilities.ItemStackSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -9,9 +10,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import static com.rinpr.machineprocessed.MachineProcessed.plugin;
 
@@ -22,9 +21,12 @@ public class SQLiteManager {
     private final String addMachine = "INSERT INTO machine_location (machine, world, x, y, z) VALUES (?, ?, ?, ?, ?)";
     private final String addMachineInventory = "INSERT INTO machine_inventory (slot1, slot2, slot3, slot11, slot16, slot20) VALUES (?, ?, ?, ?, ?, ?)";
     private final String selectMachineInventory= "SELECT * FROM machine_inventory WHERE machine_id=?";
+    private final String selectMachineNamespace = "SELECT machine FROM machine_location WHERE machine_id=?";
     private final String updateMachineInventory = "UPDATE machine_inventory SET slot1=?, slot2=?, slot3=?, slot16=?, slot20=? WHERE machine_id=?";
     private final String updateMachineProcess = "UPDATE machine_inventory SET slo11=? WHERE machine_id=?";
+    private final String updateMachineProduct = "UPDATE machine_inventory SET slot16=? WHERE machine_id=?";
     private final String deleteMachineInventory = "DELETE FROM machine_inventory WHERE machine_id = ?";
+    private final String selectAllMachineLocation = "SELECT x, y, z, world FROM machine_location";
     private final String deleteMachine = "DELETE FROM machine_location WHERE world = ? AND x = ? AND y = ? AND z = ?";
     private final String selectMachineID = "SELECT * FROM machine_location WHERE machine_id=?";
     private final String selectMachineFromLocation = "SELECT * FROM machine_location WHERE world = ? AND x = ? AND y = ? AND z = ?";
@@ -85,6 +87,24 @@ public class SQLiteManager {
             }
         } catch (SQLException e) { Bukkit.getLogger().severe("An error occurred while loading ItemStack from Database: " + e.getMessage()); }
         return item_string;
+    }
+    public String getNamespace(int MachineId) {
+        String Namespace = "Null";
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbFile);
+        PreparedStatement statement = connection.prepareStatement(selectMachineNamespace)) {
+            statement.setInt(1, MachineId);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) { Namespace = resultSet.getString("machine"); }
+        } catch (SQLException e) { Bukkit.getLogger().severe("An error occurred while loading namespace from Database: " + e.getMessage()); }
+        return Namespace;
+    }
+    public void updateMachineProduct(int MachineId) {
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbFile);
+        PreparedStatement statement = connection.prepareStatement(updateMachineProduct)) {
+            ItemStack product = new MachineConfig(getNamespace(MachineId)).getProduct();
+            statement.setString(1, new ItemStackSerializer(product).toItemString());
+            statement.executeUpdate();
+        } catch (SQLException e) { Bukkit.getLogger().severe("An error occurred while updating MachineProduct to Database: " + e.getMessage()); }
     }
     private void updateMachineProcess(int MachineId, ItemStack slot11) {
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbFile);
@@ -153,6 +173,23 @@ public class SQLiteManager {
             }
         } catch (SQLException e) { Bukkit.getLogger().severe("An error occurred while getting data from Database: " + e.getMessage()); }
         return null;
+    }
+    public Set<Location> getAllMachineLocation() {
+        Set<Location> all_location = new HashSet<>();
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbFile);
+        PreparedStatement statement = connection.prepareStatement(selectAllMachineLocation)) {
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                double x = resultSet.getDouble("x");
+                double y = resultSet.getDouble("y");
+                double z = resultSet.getDouble("z");
+                String worldName = resultSet.getString("world");
+                World world = Bukkit.getWorld(worldName);
+                Location location = new Location(world, x, y, z);
+                all_location.add(location);
+            }
+        } catch (SQLException e) { Bukkit.getLogger().severe("An error occurred while getting all Machine's location from Database: " + e.getMessage()); }
+        return all_location;
     }
     public int getMachineId(Location location) {
         int machineId = -1; // default value if no machine is found

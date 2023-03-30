@@ -18,10 +18,8 @@ public class DebugCommand {
             @Override
             public boolean onCommand(CommandSender sender, String [] arguments) {
                 Player player = (Player) sender;
-                SQLiteManager sqLiteManager = new SQLiteManager();
-//                new SmartGive(player).give(sqLiteManager.getMachineInventory(3));
-                Message.send(player, sqLiteManager.getRawMachineInventory(3).toString());
-//                Message.send(new ItemStackSerializer(player.getInventory().getItemInMainHand()).toItemString());
+                MachineInChunk a = new MachineInChunk(player.getLocation().getChunk());
+                Message.send(player, a.getMachine().toString());
                 return true;
             }
 

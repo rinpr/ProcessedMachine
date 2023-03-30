@@ -10,6 +10,7 @@ import com.rinpr.machineprocessed.Utilities.Message;
 import dev.lone.itemsadder.api.Events.FurnitureBreakEvent;
 import dev.lone.itemsadder.api.Events.FurnitureInteractEvent;
 import dev.lone.itemsadder.api.Events.FurniturePlaceSuccessEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -18,12 +19,14 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.world.ChunkLoadEvent;
+import org.bukkit.event.world.ChunkUnloadEvent;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class ItemsAdderMachine implements Listener {
+    Map<Player, Integer> machinePlayerMap = new HashMap<>();
+    Set<Integer> workingMachine = new HashSet<Integer>();
     @EventHandler
     public void BlockPlaceDebug(BlockPlaceEvent event) {
         Block block = event.getBlock();
@@ -35,6 +38,14 @@ public class ItemsAdderMachine implements Listener {
         player.sendMessage(ChatColor.GOLD + "X: " + ChatColor.WHITE + b_loc.getBlockX());
         player.sendMessage(ChatColor.GOLD + "Y: " + ChatColor.WHITE + b_loc.getBlockY());
         player.sendMessage(ChatColor.GOLD + "Z: " + ChatColor.WHITE + b_loc.getBlockZ());
+    }
+    @EventHandler
+    public void startMachine(ChunkLoadEvent event) {
+        Bukkit.broadcastMessage("someone enter in chunk");
+    }
+    @EventHandler
+    public void stopMachine(ChunkUnloadEvent event) {
+        Bukkit.broadcastMessage("someone left chunk");
     }
     @EventHandler
     public void placeItemsadderMachine(FurniturePlaceSuccessEvent event) {
@@ -59,7 +70,6 @@ public class ItemsAdderMachine implements Listener {
             sqLiteManager.deleteMachine(break_location);
         }
     }
-    Map<Player, Integer> machinePlayerMap = new HashMap<>();
     @EventHandler
     public void openItemsadderMachine(FurnitureInteractEvent event) {
         if (MachineConfig.getAllMachines().contains(Objects.requireNonNull(event.getFurniture()).getItemStack())) {
