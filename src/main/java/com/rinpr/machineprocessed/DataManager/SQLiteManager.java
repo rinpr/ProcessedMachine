@@ -53,7 +53,7 @@ public class SQLiteManager {
             statement.executeUpdate();
         } catch (SQLException e) { Bukkit.getLogger().severe("An error occurred while adding ItemStack to Database: " + e.getMessage());}
     }
-    public List<ItemStack> getMachineInventory(int MachineId) { // always return null bcz ItemStackSerializer
+    public List<ItemStack> getMachineInventory(int MachineId) {
         List<String> item_string = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbFile);
              PreparedStatement statement = connection.prepareStatement(selectMachineInventory)) {

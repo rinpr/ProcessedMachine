@@ -39,14 +39,14 @@ public class ItemsAdderMachine implements Listener {
         player.sendMessage(ChatColor.GOLD + "Y: " + ChatColor.WHITE + b_loc.getBlockY());
         player.sendMessage(ChatColor.GOLD + "Z: " + ChatColor.WHITE + b_loc.getBlockZ());
     }
-    @EventHandler
-    public void startMachine(ChunkLoadEvent event) {
-        Bukkit.broadcastMessage("someone enter in chunk");
-    }
-    @EventHandler
-    public void stopMachine(ChunkUnloadEvent event) {
-        Bukkit.broadcastMessage("someone left chunk");
-    }
+//    @EventHandler
+//    public void startMachine(ChunkLoadEvent event) {
+//        Bukkit.broadcastMessage("someone enter in chunk");
+//    }
+//    @EventHandler
+//    public void stopMachine(ChunkUnloadEvent event) {
+//        Bukkit.broadcastMessage("someone left chunk");
+//    }
     @EventHandler
     public void placeItemsadderMachine(FurniturePlaceSuccessEvent event) {
         if (ItemIdentifier.getNamespacedID(MachineConfig.getAllMachines()).contains(event.getNamespacedID())) {

@@ -32,7 +32,7 @@ public final class MachineProcessed extends JavaPlugin {
         RegisterTask();
     }
     private void RegisterTask() {
-        BukkitTask processing = new MachineProcessing(this).runTaskTimer(this,0,20L);
+        BukkitTask processing = new MachineProcessing(this).runTaskTimer(this,0,20L * 10);
     }
     private void RegisterCommand() {
         new DebugCommand();
