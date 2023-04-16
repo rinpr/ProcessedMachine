@@ -22,14 +22,9 @@ public class MachineTabComplete implements TabCompleter {
             List<String> completions = new ArrayList<>();
             List<String> argument = new ArrayList<>();
             if (args.length == 1) {
-                argument.addAll(MachineConfig.MachineList());
+                argument.add("reload");
                 StringUtil.copyPartialMatches(args[0], argument, completions);
                 Collections.sort(completions);
-            } else if (args.length == 2) {
-                for (Player p : Bukkit.getOnlinePlayers()) {
-                    argument.add(p.getName());
-                }
-                StringUtil.copyPartialMatches(args[1], argument, completions);
             }
             Collections.sort(completions);
             return completions;

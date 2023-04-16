@@ -3,6 +3,7 @@ package com.rinpr.machineprocessed.Listener;
 import com.rinpr.machineprocessed.DataManager.SQLiteManager;
 import com.rinpr.machineprocessed.MachineSection.MachineConfig;
 import com.rinpr.machineprocessed.MachineSection.MachineGUI;
+import com.rinpr.machineprocessed.Task.MachineProcessing;
 import com.rinpr.machineprocessed.Utilities.FurnitureLocation;
 import com.rinpr.machineprocessed.Utilities.ItemIdentifier;
 import com.rinpr.machineprocessed.Utilities.MachineInventoryManager;
@@ -62,12 +63,10 @@ public class ItemsAdderMachine implements Listener {
     public void breakItemsadderMachine(FurnitureBreakEvent event) {
         if (ItemIdentifier.getNamespacedID(MachineConfig.getAllMachines()).contains(event.getNamespacedID())) {
             Location break_location = new FurnitureLocation(event.getBukkitEntity(),true).getLocation();
-            // for debug
-//            Message.send(event.getPlayer(), "You break at location: ");
-//            Message.send(event.getPlayer(), break_location.toString());
             SQLiteManager sqLiteManager = new SQLiteManager();
             sqLiteManager.deleteMachineInventory(sqLiteManager.getMachineId(break_location));
             sqLiteManager.deleteMachine(break_location);
+            // if there's item inside drop all
         }
     }
     @EventHandler
@@ -78,9 +77,9 @@ public class ItemsAdderMachine implements Listener {
             int MachineID = sqLiteManager.getMachineId(machine_location);
             new MachineGUI(MachineConfig.getMachineId(event.getFurniture().getItemStack()), event.getPlayer()).openGUI(MachineID);
             machinePlayerMap.put(event.getPlayer(), MachineID);
-            // for debug
-//            Message.send(event.getPlayer(), "You clicked at machine");
-//            Message.send(event.getPlayer(), "MachineID: " + MachineID);
+            // when open check if the ingredient is match in config or not if yes do the process
+//            MachineProcessing task = new MachineProcessing(MachineID);
+//            task.broadcast();
         }
     }
     @EventHandler

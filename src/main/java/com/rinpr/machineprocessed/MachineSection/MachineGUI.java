@@ -1,22 +1,31 @@
 package com.rinpr.machineprocessed.MachineSection;
 
 import com.rinpr.machineprocessed.DataManager.SQLiteManager;
+import com.rinpr.machineprocessed.MachineProcessed;
 import com.rinpr.machineprocessed.Utilities.Message;
+import com.rinpr.machineprocessed.api.Machine;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.List;
 
 public class MachineGUI {
-    MachineConfig machine;
+    MachineProcessed plugin = JavaPlugin.getPlugin(MachineProcessed.class);
+    Machine machine;
     private final String guiName;
     private final Player player;
     public MachineGUI(String machineId, Player player) {
-        this.machine = new MachineConfig(machineId);
+        for (Machine machines : plugin.machineList) {
+            if (machines.getName().equalsIgnoreCase(machineId)) {
+                this.machine = machines;
+                break;
+            }
+        }
         this.guiName = machine.getGUIName();
         this.player = player;
     }

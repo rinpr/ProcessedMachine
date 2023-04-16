@@ -2,6 +2,7 @@ package com.rinpr.machineprocessed.DataManager;
 
 import com.rinpr.machineprocessed.MachineSection.MachineConfig;
 import com.rinpr.machineprocessed.Utilities.ItemStackSerializer;
+import com.rinpr.machineprocessed.api.Machine;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -101,7 +102,15 @@ public class SQLiteManager {
     public void updateMachineProduct(int MachineId) {
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbFile);
         PreparedStatement statement = connection.prepareStatement(updateMachineProduct)) {
-            ItemStack product = new MachineConfig(getNamespace(MachineId)).getProduct();
+            Machine machine = null;
+            for (Machine machines : plugin.machineList) {
+                if (machines.getName().equalsIgnoreCase(getNamespace(MachineId))) {
+                    machine = machines;
+                    break;
+                }
+            }
+            assert machine != null;
+            ItemStack product = machine.getProduct();
             statement.setString(1, new ItemStackSerializer(product).toItemString());
             statement.executeUpdate();
         } catch (SQLException e) { Bukkit.getLogger().severe("An error occurred while updating MachineProduct to Database: " + e.getMessage()); }
@@ -209,7 +218,6 @@ public class SQLiteManager {
     public boolean containsMachineId(Location location) { return getMachineId(location) != -1; }
     public static void loadSQLite() {
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + plugin.getDataFolder().getAbsolutePath() + File.separator + "machine.db")){
-            Bukkit.getLogger().info("Database loaded successfully");
         } catch (SQLException e) { Bukkit.getLogger().severe("An error occurred while loading Database: " + e.getMessage()); }
     }
     public static void unloadSQLite() {

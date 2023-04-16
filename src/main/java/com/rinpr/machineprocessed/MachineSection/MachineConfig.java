@@ -2,12 +2,10 @@ package com.rinpr.machineprocessed.MachineSection;
 
 import com.rinpr.machineprocessed.Utilities.ItemIdentifier;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -18,27 +16,7 @@ import java.util.stream.Stream;
 import static com.rinpr.machineprocessed.MachineProcessed.plugin;
 
 public class MachineConfig {
-    private static final File folder = new File(plugin.getDataFolder(), "/machine");
-    private String id;
-    private File Machine;
-    private YamlConfiguration yaml;
-
-    /**
-     * A constructor use to read a configuration files of machine from a specific id.
-     * @param id of a Machine's config you wanted to read.
-     */
-    public MachineConfig(String id) {
-        this.id = id;
-        this.Machine = new File(plugin.getDataFolder(), "/machine/" + id + ".yml");
-        if (!Machine.exists()) { Bukkit.getLogger().warning("No machine with that id!"); }
-        YamlConfiguration MachineData = new YamlConfiguration();
-        try {
-            MachineData.load(Machine);
-        } catch (IOException | InvalidConfigurationException e) {
-            throw new RuntimeException(e);
-        }
-        this.yaml = MachineData;
-    }
+    private static final File folder = new File(plugin.getDataFolder() + File.separator + "machine");
 
     /**
      * This method is used to generate a folder for storing machine's configuration files,
@@ -49,7 +27,6 @@ public class MachineConfig {
             boolean dirCreated = folder.mkdirs();
             if (!dirCreated) { Bukkit.getLogger().warning("Failed to create directory."); }
         }
-        Bukkit.getLogger().info("Machine folder found!");
     }
 
     /**
@@ -105,34 +82,4 @@ public class MachineConfig {
         }
         return null;
     }
-
-    /**
-     * @return ItemStack of a machine.
-     */
-    public ItemStack getMachine() { return new ItemIdentifier(Objects.requireNonNull(yaml.getString(id + ".machine"))).getItemStack().get(0); }
-
-    /**
-     * @return String of the gui name.
-     */
-    public String getGUIName() { return yaml.getString(id + ".name"); }
-
-    /**
-     * @return ItemStack of a machine's product.
-     */
-    public ItemStack getProduct() { return new ItemIdentifier(Objects.requireNonNull(yaml.getString(id + ".product"))).getItemStack().get(0); }
-
-    /**
-     * @return ItemStack List of machine's ingredients.
-     */
-    public List<ItemStack> getIngredient() { return new ItemIdentifier(yaml.getStringList(id + ".ingredients")).getItemStack(); }
-
-    /**
-     * @return ItemStack of a machine's fuel.
-     */
-    public ItemStack getFuel() { return new ItemIdentifier(Objects.requireNonNull(yaml.getString(id + ".fuel"))).getItemStack().get(0); }
-
-    /**
-     * @return A time processed of the machine.
-     */
-    public int getTime() { return yaml.getInt(id + ".time"); }
 }
