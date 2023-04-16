@@ -2,7 +2,6 @@ package com.rinpr.machineprocessed.api;
 
 import com.rinpr.machineprocessed.MachineProcessed;
 import com.rinpr.machineprocessed.Utilities.ItemIdentifier;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;

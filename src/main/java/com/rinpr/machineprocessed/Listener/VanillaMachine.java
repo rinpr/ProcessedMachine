@@ -1,6 +1,5 @@
 package com.rinpr.machineprocessed.Listener;
 
-import com.rinpr.machineprocessed.MachineSection.MachineConfig;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;

@@ -3,15 +3,12 @@ package com.rinpr.machineprocessed.Listener;
 import com.rinpr.machineprocessed.DataManager.SQLiteManager;
 import com.rinpr.machineprocessed.MachineSection.MachineConfig;
 import com.rinpr.machineprocessed.MachineSection.MachineGUI;
-import com.rinpr.machineprocessed.Task.MachineProcessing;
 import com.rinpr.machineprocessed.Utilities.FurnitureLocation;
 import com.rinpr.machineprocessed.Utilities.ItemIdentifier;
 import com.rinpr.machineprocessed.Utilities.MachineInventoryManager;
-import com.rinpr.machineprocessed.Utilities.Message;
 import dev.lone.itemsadder.api.Events.FurnitureBreakEvent;
 import dev.lone.itemsadder.api.Events.FurnitureInteractEvent;
 import dev.lone.itemsadder.api.Events.FurniturePlaceSuccessEvent;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -20,8 +17,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.world.ChunkLoadEvent;
-import org.bukkit.event.world.ChunkUnloadEvent;
 
 import java.util.*;
 

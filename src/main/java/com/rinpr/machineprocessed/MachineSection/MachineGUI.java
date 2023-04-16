@@ -2,7 +2,6 @@ package com.rinpr.machineprocessed.MachineSection;
 
 import com.rinpr.machineprocessed.DataManager.SQLiteManager;
 import com.rinpr.machineprocessed.MachineProcessed;
-import com.rinpr.machineprocessed.Utilities.Message;
 import com.rinpr.machineprocessed.api.Machine;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;

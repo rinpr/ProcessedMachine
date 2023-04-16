@@ -1,10 +1,7 @@
 package com.rinpr.machineprocessed.Command;
 
 import com.rinpr.machineprocessed.MachineProcessed;
-import com.rinpr.machineprocessed.MachineSection.MachineConfig;
-import com.rinpr.machineprocessed.MachineSection.MachineGUI;
 import com.rinpr.machineprocessed.Utilities.Message;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;

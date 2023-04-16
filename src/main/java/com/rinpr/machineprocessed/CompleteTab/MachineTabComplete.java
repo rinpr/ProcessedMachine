@@ -1,7 +1,5 @@
 package com.rinpr.machineprocessed.CompleteTab;
 
-import com.rinpr.machineprocessed.MachineSection.MachineConfig;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;

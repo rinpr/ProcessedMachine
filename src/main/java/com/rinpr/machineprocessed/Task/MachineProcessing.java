@@ -1,7 +1,6 @@
 package com.rinpr.machineprocessed.Task;
 
 import com.rinpr.machineprocessed.DataManager.SQLiteManager;
-import com.rinpr.machineprocessed.MachineSection.MachineConfig;
 import com.rinpr.machineprocessed.api.Machine;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
