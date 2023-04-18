@@ -72,23 +72,6 @@ public class SQLiteManager {
         ItemStackSerializer itemStackSerializer = new ItemStackSerializer(item_string);
         return  itemStackSerializer.toItemStacks();
     }
-    public List<String> getRawMachineInventory(int MachineId) {
-        List<String> item_string = new ArrayList<>();
-        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbFile);
-             PreparedStatement statement = connection.prepareStatement(selectMachineInventory)) {
-            statement.setInt(1, MachineId);
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                item_string.add(resultSet.getString("slot1"));
-                item_string.add(resultSet.getString("slot2"));
-                item_string.add(resultSet.getString("slot3"));
-                item_string.add(resultSet.getString("slot11"));
-                item_string.add(resultSet.getString("slot16"));
-                item_string.add(resultSet.getString("slot20"));
-            }
-        } catch (SQLException e) { Bukkit.getLogger().severe("An error occurred while loading ItemStack from Database: " + e.getMessage()); }
-        return item_string;
-    }
     public String getNamespace(int MachineId) {
         String Namespace = "Null";
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbFile);

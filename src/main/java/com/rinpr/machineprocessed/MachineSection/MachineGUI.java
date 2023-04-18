@@ -28,18 +28,6 @@ public class MachineGUI {
         this.guiName = machine.getGUIName();
         this.player = player;
     }
-    public void openGUI() {
-        int[] space_slot = new int[]{0,4,5,6,7,8,9,10,12,13,14,15,17,18,19,21,22,23,24,25,26};
-        Inventory inv = Bukkit.createInventory(player, 27, guiName);
-        ItemStack space = new ItemStack(Material.LIGHT_GRAY_STAINED_GLASS_PANE);
-        ItemMeta space_meta = space.getItemMeta();
-        assert space_meta != null;
-        space_meta.setDisplayName(" ");
-        space_meta.setCustomModelData(1);
-        space.setItemMeta(space_meta);
-        for (int slot : space_slot) { inv.setItem(slot,space); }
-        player.openInventory(inv);
-    }
     public void openGUI(int MachineId) {
         SQLiteManager item_slot = new SQLiteManager();
         int[] space_slot = new int[]{0,4,5,6,7,8,9,10,12,13,14,15,17,18,19,21,22,23,24,25,26};
