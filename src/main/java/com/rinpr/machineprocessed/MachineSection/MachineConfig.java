@@ -22,6 +22,7 @@ public class MachineConfig {
      * This method is used to generate a folder for storing machine's configuration files,
      * Will only work if the folder hasn't been created yet.
      */
+    @Deprecated
     public static void generateMachineFolder() {
         if (!folder.exists()) {
             boolean dirCreated = folder.mkdirs();
