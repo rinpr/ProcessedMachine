@@ -25,18 +25,18 @@ import java.util.stream.Collectors;
 public class ItemsAdderMachine implements Listener {
     Map<Player, Integer> machinePlayerMap = new HashMap<>();
     Set<Integer> workingMachine = new HashSet<Integer>();
-    @EventHandler
-    public void BlockPlaceDebug(BlockPlaceEvent event) {
-        Block block = event.getBlock();
-        Player player = event.getPlayer();
-        Location b_loc = block.getLocation();
-        player.sendMessage(ChatColor.BLUE + "You Placed: " + ChatColor.LIGHT_PURPLE + block.getType().toString().toUpperCase());
-        player.sendMessage(ChatColor.BLUE + "Location:");
-        player.sendMessage(ChatColor.GOLD + "World: " + ChatColor.WHITE + Objects.requireNonNull(b_loc.getWorld()).getName());
-        player.sendMessage(ChatColor.GOLD + "X: " + ChatColor.WHITE + b_loc.getBlockX());
-        player.sendMessage(ChatColor.GOLD + "Y: " + ChatColor.WHITE + b_loc.getBlockY());
-        player.sendMessage(ChatColor.GOLD + "Z: " + ChatColor.WHITE + b_loc.getBlockZ());
-    }
+//    @EventHandler
+//    public void BlockPlaceDebug(BlockPlaceEvent event) {
+//        Block block = event.getBlock();
+//        Player player = event.getPlayer();
+//        Location b_loc = block.getLocation();
+//        player.sendMessage(ChatColor.BLUE + "You Placed: " + ChatColor.LIGHT_PURPLE + block.getType().toString().toUpperCase());
+//        player.sendMessage(ChatColor.BLUE + "Location:");
+//        player.sendMessage(ChatColor.GOLD + "World: " + ChatColor.WHITE + Objects.requireNonNull(b_loc.getWorld()).getName());
+//        player.sendMessage(ChatColor.GOLD + "X: " + ChatColor.WHITE + b_loc.getBlockX());
+//        player.sendMessage(ChatColor.GOLD + "Y: " + ChatColor.WHITE + b_loc.getBlockY());
+//        player.sendMessage(ChatColor.GOLD + "Z: " + ChatColor.WHITE + b_loc.getBlockZ());
+//    }
     @EventHandler
     public void placeItemsadderMachine(FurniturePlaceSuccessEvent event) {
         if (ItemIdentifier.getNamespacedID(MachineConfig.getAllMachines()).contains(event.getNamespacedID())) {
