@@ -19,6 +19,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ItemsAdderMachine implements Listener {
     Map<Player, Integer> machinePlayerMap = new HashMap<>();
@@ -62,12 +63,15 @@ public class ItemsAdderMachine implements Listener {
             SQLiteManager sqLiteManager = new SQLiteManager();
             Location machine_location = new FurnitureLocation(event.getBukkitEntity(),true).getLocation();
             int MachineID = sqLiteManager.getMachineId(machine_location);
+
+            if (machinePlayerMap.containsValue(MachineID)) return;
+
             new MachineGUI(MachineConfig.getMachineId(event.getFurniture().getItemStack()), event.getPlayer()).openGUI(MachineID);
             machinePlayerMap.put(event.getPlayer(), MachineID);
         }
     }
     @EventHandler
-    public void saveItemsAdderMachineInventory(InventoryCloseEvent event) {
+    public void closeItemsadderMachine(InventoryCloseEvent event) {
         if (!MachineConfig.MachineName().contains(event.getView().getTitle())) return;
         if (event.getInventory().getSize() != 27) return;
 
@@ -82,5 +86,20 @@ public class ItemsAdderMachine implements Listener {
 //        Message.send(player,output);
 
         machinePlayerMap.remove(player);
+    }
+
+    /** This method use to get key by the given value.
+     * @param map Map you wanted to get key.
+     * @param value The value you needed to find it's key.
+     * @param <T> Key
+     * @param <E> Value
+     * @return Key from the value provided.
+     */
+    private <T, E> Set<T> getKeysByValue(Map<T, E> map, E value) {
+        return map.entrySet()
+                .stream()
+                .filter(entry -> Objects.equals(entry.getValue(), value))
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toSet());
     }
 }
