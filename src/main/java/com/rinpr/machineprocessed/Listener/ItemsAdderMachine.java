@@ -17,6 +17,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -52,9 +53,12 @@ public class ItemsAdderMachine implements Listener {
         if (ItemIdentifier.getNamespacedID(MachineConfig.getAllMachines()).contains(event.getNamespacedID())) {
             Location break_location = new FurnitureLocation(event.getBukkitEntity(),true).getLocation();
             SQLiteManager sqLiteManager = new SQLiteManager();
+            // if there's item inside drop all
+            for (ItemStack item : new MachineInventoryManager(sqLiteManager.getMachineId(break_location)).getAll()) {
+                Objects.requireNonNull(break_location.getWorld()).dropItemNaturally(break_location, item);
+            }
             sqLiteManager.deleteMachineInventory(sqLiteManager.getMachineId(break_location));
             sqLiteManager.deleteMachine(break_location);
-            // if there's item inside drop all
         }
     }
     @EventHandler
