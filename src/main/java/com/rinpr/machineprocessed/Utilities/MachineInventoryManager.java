@@ -1,14 +1,18 @@
 package com.rinpr.machineprocessed.Utilities;
 
+import com.rinpr.machineprocessed.DataManager.SQLiteManager;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * This class helps you manage machine's inventory easier and less confusing when you tried to
  * get the machine's slot. This class has a method to get the slot with recognizable method name.
- * Simply just input the machine's inventory in constructor, and now you can get the slot you wanted by
- * a public method provided in this class.
+ * Simply just input the machine's inventory or machine's id in constructor, and now you can get the slot you wanted by
+ * slot you wanted by a public method provided in this class.
  */
 public class MachineInventoryManager {
     private final ItemStack slot1;
@@ -26,6 +30,18 @@ public class MachineInventoryManager {
         this.slot3 = inventory.getItem(3) != null ? inventory.getItem(3) : new ItemStack(Material.AIR);
         this.slot16 = inventory.getItem(16) != null ? inventory.getItem(16) : new ItemStack(Material.AIR);
         this.slot20 = inventory.getItem(20) != null ? inventory.getItem(20) : new ItemStack(Material.AIR);
+    }
+
+    /**
+     * @param MachineID The machine id you wanted to get it's content.
+     */
+    public MachineInventoryManager(int MachineID) {
+        SQLiteManager database = new SQLiteManager();
+        this.slot1 = database.getMachineInventory(MachineID).get(0);
+        this.slot2 = database.getMachineInventory(MachineID).get(1);
+        this.slot3 = database.getMachineInventory(MachineID).get(2);
+        this.slot16 = database.getMachineInventory(MachineID).get(4);
+        this.slot20 = database.getMachineInventory(MachineID).get(5);
     }
 
     /**
@@ -52,4 +68,17 @@ public class MachineInventoryManager {
      * @return Product in the machine. (slot20) if there's nothing will return Air ItemStack.
      */
     public ItemStack getProduct() { return slot16; }
+
+    /**
+     * @return All items in the machine.
+     */
+    public List<ItemStack> getAll() {
+        List<ItemStack> result = new ArrayList<>();
+        result.add(this.slot1);
+        result.add(this.slot2);
+        result.add(this.slot3);
+        result.add(this.slot16);
+        result.add(this.slot20);
+        return result;
+    }
 }
