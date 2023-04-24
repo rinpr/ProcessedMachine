@@ -3,7 +3,7 @@ Sample:
   name: "sampless"
   product: "itemsadder:traffic_jam:8"
   ingredients:
-    - " "
+    - "vanilla:STICK:1"
     - "vanilla:STICK:1"
     - "vanilla:IRON_BLOCK:1"
   fuel: "vanilla:COAL_BLOCK:1"

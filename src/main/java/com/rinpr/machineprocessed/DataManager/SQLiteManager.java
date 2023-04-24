@@ -106,14 +106,14 @@ public class SQLiteManager {
             statement.executeUpdate();
         } catch (SQLException e) { Bukkit.getLogger().severe("An error occurred while updating MachineProcess to Database: " + e.getMessage()); }
     }
-    public void updateMachineInventory(int MachineId, ItemStack slot1, ItemStack slot2, ItemStack slot3, ItemStack slot16, ItemStack slot20) {
+    public void updateMachineInventory(int MachineId, ItemStack ingredient1, ItemStack ingredient2, ItemStack ingredient3, ItemStack product, ItemStack fuel) {
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbFile);
         PreparedStatement statement = connection.prepareStatement(updateMachineInventory)) {
-            statement.setString(1, new ItemStackSerializer(slot1).toItemString());
-            statement.setString(2, new ItemStackSerializer(slot2).toItemString());
-            statement.setString(3, new ItemStackSerializer(slot3).toItemString());
-            statement.setString(4, new ItemStackSerializer(slot16).toItemString());
-            statement.setString(5, new ItemStackSerializer(slot20).toItemString());
+            statement.setString(1, new ItemStackSerializer(ingredient1).toItemString());
+            statement.setString(2, new ItemStackSerializer(ingredient2).toItemString());
+            statement.setString(3, new ItemStackSerializer(ingredient3).toItemString());
+            statement.setString(4, new ItemStackSerializer(product).toItemString());
+            statement.setString(5, new ItemStackSerializer(fuel).toItemString());
             statement.setInt(6, MachineId);
             statement.executeUpdate();
         } catch (SQLException e) { Bukkit.getLogger().severe("An error occurred while updating ItemStack to Database: " + e.getMessage()); }

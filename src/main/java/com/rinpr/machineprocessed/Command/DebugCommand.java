@@ -1,20 +1,18 @@
 package com.rinpr.machineprocessed.Command;
 
 import com.rinpr.machineprocessed.DataManager.SQLiteManager;
+import com.rinpr.machineprocessed.Task.MachineProcessing;
 import com.rinpr.machineprocessed.Utilities.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.io.File;
-
 public class DebugCommand {
     public DebugCommand() {
-        new CommandBase("print") {
+        new CommandBase("print", false) {
             @Override
             public boolean onCommand(CommandSender sender, String [] arguments) {
-                Player player = (Player) sender;
-                MachineInChunk a = new MachineInChunk(player.getLocation().getChunk());
-                Message.send(player, a.getMachine().toString());
+                MachineProcessing a = new MachineProcessing(5);
+                a.updateProduct();
                 return true;
             }
 

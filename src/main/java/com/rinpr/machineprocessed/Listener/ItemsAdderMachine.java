@@ -35,14 +35,6 @@ public class ItemsAdderMachine implements Listener {
         player.sendMessage(ChatColor.GOLD + "Y: " + ChatColor.WHITE + b_loc.getBlockY());
         player.sendMessage(ChatColor.GOLD + "Z: " + ChatColor.WHITE + b_loc.getBlockZ());
     }
-//    @EventHandler
-//    public void startMachine(ChunkLoadEvent event) {
-//        Bukkit.broadcastMessage("someone enter in chunk");
-//    }
-//    @EventHandler
-//    public void stopMachine(ChunkUnloadEvent event) {
-//        Bukkit.broadcastMessage("someone left chunk");
-//    }
     @EventHandler
     public void placeItemsadderMachine(FurniturePlaceSuccessEvent event) {
         if (ItemIdentifier.getNamespacedID(MachineConfig.getAllMachines()).contains(event.getNamespacedID())) {
@@ -72,9 +64,6 @@ public class ItemsAdderMachine implements Listener {
             int MachineID = sqLiteManager.getMachineId(machine_location);
             new MachineGUI(MachineConfig.getMachineId(event.getFurniture().getItemStack()), event.getPlayer()).openGUI(MachineID);
             machinePlayerMap.put(event.getPlayer(), MachineID);
-            // when open check if the ingredient is match in config or not if yes do the process
-//            MachineProcessing task = new MachineProcessing(MachineID);
-//            task.broadcast();
         }
     }
     @EventHandler
@@ -86,7 +75,7 @@ public class ItemsAdderMachine implements Listener {
         MachineInventoryManager slot = new MachineInventoryManager(event.getInventory());
 
         SQLiteManager sqLiteManager = new SQLiteManager();
-        sqLiteManager.updateMachineInventory(machinePlayerMap.get(player), slot.getIngredient1(), slot.getIngredient2(), slot.getIngredient3(), slot.getFuel(), slot.getProduct());
+        sqLiteManager.updateMachineInventory(machinePlayerMap.get(player), slot.getIngredient1(), slot.getIngredient2(), slot.getIngredient3(), slot.getProduct(), slot.getFuel());
 
         // for debug
 //        String output = slot.getIngredient1().toString() + slot.getIngredient2().toString() + slot.getIngredient3().toString() + slot.getFuel().toString() + slot.getProduct().toString();
