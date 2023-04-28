@@ -88,18 +88,15 @@ public class ItemsAdderMachine implements Listener {
 
             // Check if the machine is processing or not.
             if (workingMachine.containsKey(MachineID)) {
-                System.out.println("Its processable");
                 // Do the machine process if the machine's id is on the processable list.
                 MachineProcessing process = new MachineProcessing(MachineID);
                 // Get the present time
                 LocalDateTime last_open_time = workingMachine.get(MachineID);
-                System.out.println("Current time: " + last_open_time);
                 // Get the product amount that it should be.
                 int times = new ProductCalculation(MachineID, last_open_time).GetProductAmount();
                 // Update the machine.
                 process.updateProduct(times);
                 workingMachine.remove(MachineID);
-                System.out.println(200);
             }
             // Open the machine to event player.
             new MachineGUI(MachineConfig.getMachineId(event.getFurniture().getItemStack()), event.getPlayer()).openGUI(MachineID);
@@ -124,10 +121,8 @@ public class ItemsAdderMachine implements Listener {
             LocalDateTime time_now = LocalDateTime.now();
             // Put the machine's id and present time in workingMachine Map
             workingMachine.put(MachineID, time_now);
-            System.out.println("Saving time to map : " + time_now);
             // Remove player using machine from Map. (Required when closing machine)
             machinePlayerMap.remove(player);
-            System.out.println("added processable into the list");
         }
 
         // for debug
