@@ -47,9 +47,10 @@ public class Machine {
     }
 
     /**
-     * @return A machine's name.
+     * @return Machine's namespace aka machine's config id(string)
+     * Notices: This has nothing to do with a database.
      */
-    public String getName(){
+    public String getNamespace(){
         return this.machineName;
     }
 
