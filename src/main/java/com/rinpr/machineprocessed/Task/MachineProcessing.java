@@ -21,10 +21,10 @@ public class MachineProcessing {
     }
 
     /** This private method use to check the machine's ingredient that if it matches
-     * in the config or not, And also check if it's enough amount for product to update or not.
-     * @return True if the ingredient is matched from config and enough amount ot update, else false.
+     * in the config or not, And also check if it's enough amounts for product to update or not.
+     * @return True if the ingredient is matched from config and enough amounts ot update, else false.
      */
-    private boolean isProcessable() {
+    public boolean isProcessable() {
         List<ItemStack> configIngredients = config.getIngredient();
         List<ItemStack> machineIngredients = getIngredient();
 
@@ -55,7 +55,7 @@ public class MachineProcessing {
         // Check if the product slot is not filled with other item than product itself and air.
         if (getProduct().getType() != Material.AIR && !getProduct().isSimilar(config.getProduct())) return false;
 
-        // All 3 ingredients match and the machine has at least the required amount of each, so it's a match
+        // All 3 ingredients match, and the machine has at least the required amount of each, so it's a match
         return true;
     }
 
@@ -63,12 +63,12 @@ public class MachineProcessing {
      * This method use to update product in the machine's database automatically.
      * Will consume material needed and give 1 product as ItemStack.
      */
-    public void updateProduct() {
+    private void updateProduct() {
         if (isProcessable()) {
             List<ItemStack> configIngredients = config.getIngredient();
             List<ItemStack> machineIngredients = getIngredient();
 
-            // Remove fuel from machine's inventory by x amount based on config
+            // Remove fuel from the machine's inventory by x amount based on config
             ItemStack fuel = getFuel();
             fuel.setAmount(getFuel().getAmount() - config.getFuel().getAmount());
 
@@ -81,7 +81,7 @@ public class MachineProcessing {
                 machineItem.setAmount(machineAmount - amountToRemove);
             }
 
-            /* Set new amount of product if it's already exists will increment the amount by 1
+            /* Set new amount of product if it's already existed will increment the amount by 1
              * else if there's nothing ( Air ItemStack ) will set to product.
             */
             ItemStack product = config.getProduct();
@@ -91,13 +91,24 @@ public class MachineProcessing {
                 }
             }
 
-            // Update the final machine inventory to database.
+            // Update the final machine inventory to a database.
             database.updateMachineInventory(machine_id,
                     machineIngredients.get(0),
                     machineIngredients.get(1),
                     machineIngredients.get(2),
                     product,
                     fuel);
+        }
+    }
+
+    /** This method use to update product in the machine's database automatically.
+     * Will consume material needed and give product as ItemStack; thus the amount
+     * is based on the input.
+     * @param times How many times should it update product item?
+     */
+    public void updateProduct(int times) {
+        for (int i = 0; i < times; i++) {
+            updateProduct();
         }
     }
 

@@ -20,7 +20,7 @@ public class MachineGUI {
     private final Player player;
     public MachineGUI(String machineId, Player player) {
         for (Machine machines : plugin.machineList) {
-            if (machines.getName().equalsIgnoreCase(machineId)) {
+            if (machines.getNamespace().equalsIgnoreCase(machineId)) {
                 this.machine = machines;
                 break;
             }
