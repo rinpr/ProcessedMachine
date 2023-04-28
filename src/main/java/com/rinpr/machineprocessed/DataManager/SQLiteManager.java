@@ -1,6 +1,5 @@
 package com.rinpr.machineprocessed.DataManager;
 
-import com.rinpr.machineprocessed.MachineSection.MachineConfig;
 import com.rinpr.machineprocessed.Utilities.ItemStackSerializer;
 import com.rinpr.machineprocessed.api.Machine;
 import org.bukkit.Bukkit;
@@ -87,7 +86,7 @@ public class SQLiteManager {
         PreparedStatement statement = connection.prepareStatement(updateMachineProduct)) {
             Machine machine = null;
             for (Machine machines : plugin.machineList) {
-                if (machines.getName().equalsIgnoreCase(getNamespace(MachineId))) {
+                if (machines.getNamespace().equalsIgnoreCase(getNamespace(MachineId))) {
                     machine = machines;
                     break;
                 }
