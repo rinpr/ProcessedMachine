@@ -1,7 +1,7 @@
 package com.rinpr.machineprocessed.Utilities;
 
 import dev.lone.itemsadder.api.CustomStack;
-import io.th0rgal.oraxen.api.OraxenItems;
+//import io.th0rgal.oraxen.api.OraxenItems;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -70,9 +70,9 @@ public class ItemIdentifier {
      * @return ItemStack from Oraxen plugin.
      */
     private ItemStack getOraxenItemStack(String itemID, int amount) {
-        ItemStack i = OraxenItems.getItemById(itemID).build();
-        i.setAmount(amount);
-        return i;
+//        ItemStack i = OraxenItems.getItemById(itemID).build();
+//        i.setAmount(amount);
+        return new ItemStack(Material.AIR);
     }
 
     /**

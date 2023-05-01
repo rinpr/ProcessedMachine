@@ -5,8 +5,8 @@ import com.rinpr.machineprocessed.Command.MProcessed;
 import com.rinpr.machineprocessed.CompleteTab.MachineTabComplete;
 import com.rinpr.machineprocessed.DataManager.SQLiteManager;
 import com.rinpr.machineprocessed.Listener.ItemsAdderMachine;
-import com.rinpr.machineprocessed.Listener.OraxenMachine;
 import com.rinpr.machineprocessed.Listener.MachineInventory;
+import com.rinpr.machineprocessed.Listener.OraxenMachine;
 import com.rinpr.machineprocessed.api.Machine;
 import net.md_5.bungee.api.ChatColor;
 import org.apache.commons.io.IOUtils;
@@ -52,7 +52,8 @@ public final class MachineProcessed extends JavaPlugin {
         if (isPluginEnabled("Itemsadder")) {
             Bukkit.getLogger().info("Itemsadder found!");
             Bukkit.getPluginManager().registerEvents(new ItemsAdderMachine(), this);
-        } else if (isPluginEnabled("Oraxen")) {
+        }
+        else if (isPluginEnabled("Oraxen")) {
             Bukkit.getLogger().info("Oraxen found!");
             Bukkit.getPluginManager().registerEvents(new OraxenMachine(), this);
         }
