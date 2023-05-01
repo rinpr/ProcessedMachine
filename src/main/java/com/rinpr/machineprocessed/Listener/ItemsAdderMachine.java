@@ -40,18 +40,6 @@ public class ItemsAdderMachine implements Listener {
      */
     Map<Integer, LocalDateTime> workingMachine = new HashMap<>();
 
-//    @EventHandler
-//    public void BlockPlaceDebug(BlockPlaceEvent event) {
-//        Block block = event.getBlock();
-//        Player player = event.getPlayer();
-//        Location b_loc = block.getLocation();
-//        player.sendMessage(ChatColor.BLUE + "You Placed: " + ChatColor.LIGHT_PURPLE + block.getType().toString().toUpperCase());
-//        player.sendMessage(ChatColor.BLUE + "Location:");
-//        player.sendMessage(ChatColor.GOLD + "World: " + ChatColor.WHITE + Objects.requireNonNull(b_loc.getWorld()).getName());
-//        player.sendMessage(ChatColor.GOLD + "X: " + ChatColor.WHITE + b_loc.getBlockX());
-//        player.sendMessage(ChatColor.GOLD + "Y: " + ChatColor.WHITE + b_loc.getBlockY());
-//        player.sendMessage(ChatColor.GOLD + "Z: " + ChatColor.WHITE + b_loc.getBlockZ());
-//    }
     @EventHandler
     public void placeItemsadderMachine(FurniturePlaceSuccessEvent event) {
         if (ItemIdentifier.getNamespacedID(MachineConfig.getAllMachines()).contains(event.getNamespacedID())) {
@@ -117,6 +105,8 @@ public class ItemsAdderMachine implements Listener {
 
         // Check if the machine ingredient is enough or not, Will add to workingMachine if true.
         if (new MachineProcessing(MachineID).isProcessable()) {
+            // If this machine is already on queue, it will not reset the key and value.
+            if (workingMachine.containsKey(MachineID)) return;
             // Get the present time
             LocalDateTime time_now = LocalDateTime.now();
             // Put the machine's id and present time in workingMachine Map
@@ -124,10 +114,6 @@ public class ItemsAdderMachine implements Listener {
             // Remove player using machine from Map. (Required when closing machine)
             machinePlayerMap.remove(player);
         }
-
-        // for debug
-//        String output = slot.getIngredient1().toString() + slot.getIngredient2().toString() + slot.getIngredient3().toString() + slot.getFuel().toString() + slot.getProduct().toString();
-//        Message.send(player,output);
 
         machinePlayerMap.remove(player);
     }
